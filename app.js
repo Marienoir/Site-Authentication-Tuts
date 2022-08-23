@@ -20,8 +20,8 @@ app.use(morgan('dev'))
 // 2
 app.set('views', path.join(__dirname, 'views'))
 app.engine('handlebars', expressHandlebars.engine({
-    extname: '.hbs',
-    defaultLayout: false,
+    extname: '.handlebars',
+    defaultLayout: 'layout',
     layoutsDir: "views/layouts/"
 }));
 app.set('view engine', 'handlebars')
@@ -32,10 +32,10 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session({
-  // cookie: { maxAge: 60000 },
+  cookie: { maxAge: 60000 },
   secret: 'cookiesecret',
-  saveUninitialized: true,
-  resave: true
+  saveUninitialized: false,
+  resave: false
 }));
 
 app.use(passport.initialize())
@@ -44,10 +44,8 @@ app.use(passport.session())
 // 4
 app.use(flash())
 app.use((req, res, next) => {
-  res.locals.success_mesages = req.flash('success')
+  res.locals.success_messages = req.flash('success')
   res.locals.error_messages = req.flash('error')
-  console.log(res.locals.success_mesages);
-  console.log(res.locals.error_messages);
   next()
 })
 
